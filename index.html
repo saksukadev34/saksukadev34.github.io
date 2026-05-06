@@ -178,11 +178,14 @@
         <div class="signals-list" id="signals-container"></div>
 
         <div class="proof-section">
-            <h4>💡 Çalışma Prensibi ve Gerçeklik Kanıtı</h4>
+            <h4>💡 Çalışma Prensibi, Gerçeklik Kanıtı ve Siber Sınır Kuralları</h4>
             <p>
-                Bu sistem, sivil uçakların çarpışmaları önlemek amacıyla her saniye çevreye fırlattığı şifresiz <strong>1090 MHz ADS-B radyo dalgalarını</strong> esas alır. 
-                Sitemiz, dünya genelindeki gönüllü SDR (Yazılım Tanımlı Radyo) alıcı istasyonlarının verilerini bir araya getiren küresel <strong>OpenSky Network API</strong> sunucularına doğrudan entegredir. 
-                Sayfada listelenen her çağrı kodu (Callsign), hız ve koordinat verisi, şu saniyede hava sahasında uçan uçaklardan gelen resmi, doğrulanmış ve manipüle edilmemiş ham telemetri sinyalleridir.
+                Bu sistem, sivil uçakların havada çarpışmaları önlemek ve konumlarını bildirmek için saniyede bir kez çevreye fırlattığı şifresiz <strong>1090 MHz ADS-B telsiz sinyallerini</strong> işler. Sistemimiz, dünya genelindeki gönüllü radyo anteni istasyonlarının topladığı verileri paylaşan küresel <strong>OpenSky Network API</strong> sunucularına doğrudan entegredir. 
+            </p>
+            <p>
+                <strong>⚠️ "Simüle Edilen Veri" Nedir?</strong><br>
+                OpenSky Network, bu canlı sinyal akışını sivil projeler için ücretsiz sunmaktadır. Ancak sunucu güvenliği ve aşırı yüklenmeyi önlemek amacıyla çok katı <strong>Sorgu Sınır Kuralları (Rate Limit)</strong> uygular. Sitemize üst üste çok hızlı girildiğinde veya sunucu yoğun olduğunda, canlı sinyal akışı geçici olarak engellenir. 
+                Sistemimiz, bu engelleme anında çökmemek veya boş ekran vermemek amacıyla otomatik olarak <strong>"Simüle Edilen Veri"</strong> (Yedek Veri) moduna geçer. Ekranda "CANLI RADYO SİNYALİ" ibaresini gördüğünüz her an veriler %100 gerçek zamanlı olarak havadaki uçaklardan çekilmektedir.
             </p>
         </div>
     </div>
@@ -269,7 +272,7 @@
                         <div class="signal-meta">
                             <div><strong>Hız:</strong> ${ucak.hiz}</div>
                             <div><strong>İrtifa:</strong> ${ucak.alt}</div>
-                            <span class="badge">SİMÜLE EDİLEN VERİ</span>
+                            <span class="badge" style="background-color: #FEEBC8; color: #7B341E;">SİMÜLE EDİLEN VERİ</span>
                         </div>
                     </div>
                 `;
