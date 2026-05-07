@@ -3,201 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameAir | Future Platform</title>
+    <title>GameAir | Platform</title>
     <style>
-        :root { --accent: #2ecc71; --bg: #f4f7f6; --white: #ffffff; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: #1a1a1a; }
-        
-        /* AUTH SCREEN (KAYIT & GİRİŞ) */
+        :root { --accent: #2ecc71; --bg: #f0f2f5; --white: #ffffff; --sidebar: #ffffff; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); display: flex; height: 100vh; overflow: hidden; }
+
+        /* GİRİŞ EKRANI */
         #authScreen { position: fixed; inset: 0; background: white; display: flex; align-items: center; justify-content: center; z-index: 10000; }
-        .auth-card { width: 340px; padding: 30px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-radius: 20px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; outline: none; }
-        .btn { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn:hover { opacity: 0.8; }
+        .auth-card { width: 320px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 20px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        .btn { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; }
 
-        /* MAIN APP */
-        #app { display: none; padding-top: 70px; padding-bottom: 100px; }
-        header { background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); height: 65px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: fixed; width: 100%; top: 0; border-bottom: 1px solid #eee; z-index: 1000; box-sizing: border-box; }
+        /* SOL KATEGORİ MENÜSÜ */
+        nav { width: 260px; background: var(--sidebar); border-right: 1px solid #ddd; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        .brand { font-size: 24px; font-weight: 900; color: var(--accent); margin-bottom: 30px; letter-spacing: -1px; }
+        .channel-btn { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-weight: 600; color: #555; transition: 0.2s; margin-bottom: 5px; display: flex; align-items: center; }
+        .channel-btn:hover { background: #f0f2f5; color: var(--accent); }
+        .channel-btn.active { background: #e8f5e9; color: var(--accent); }
+        .channel-btn::before { content: "#"; margin-right: 10px; opacity: 0.5; }
+
+        /* ANA İÇERİK ALANI */
+        main { flex: 1; overflow-y: auto; position: relative; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; height: 60px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 100; box-sizing: border-box; }
+
+        .feed-container { width: 100%; max-width: 600px; padding: 20px; }
         
-        .container { max-width: 650px; margin: 0 auto; padding: 0 15px; }
+        /* POST TASARIMI */
+        .post { background: white; padding: 20px; border-radius: 15px; border: 1px solid #ddd; margin-bottom: 20px; animation: fadeIn 0.3s; }
+        .admin-tag { background: #e8f5e9; color: #2ecc71; font-size: 10px; padding: 3px 8px; border-radius: 5px; font-weight: bold; margin-left: 8px; }
+        video { width: 100%; border-radius: 10px; margin-top: 10px; background: #000; }
 
-        /* PROFILE DESIGN */
-        .profile-box { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #eee; margin-bottom: 25px; }
-        #banner { height: 180px; width: 100%; object-fit: cover; background: linear-gradient(45deg, #2ecc71, #27ae60); }
-        .pfp-wrap { text-align: center; margin-top: -60px; padding-bottom: 20px; }
-        #pfp { width: 110px; height: 110px; border-radius: 50%; border: 5px solid white; background: #eee; object-fit: cover; }
-
-        /* POSTS */
-        .post { background: white; padding: 20px; border-radius: 18px; border: 1px solid #eee; margin-top: 20px; animation: fadeIn 0.5s; }
-        video { width: 100%; border-radius: 12px; margin-top: 10px; background: #000; }
-        .admin-badge { background: #e8f5e9; color: #2ecc71; font-size: 10px; padding: 4px 10px; border-radius: 6px; font-weight: 800; margin-left: 8px; }
-
-        /* MODALS */
+        /* MODAL */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 350px; }
         
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div id="authScreen">
         <div class="auth-card">
-            <h1 style="color:var(--accent); letter-spacing: -1px;">GameAir</h1>
-            <p id="authMsg" style="font-size: 14px; color: #666;">Yönetici Hesabını Oluştur</p>
-            <input type="email" id="emailInput" placeholder="E-posta Adresiniz">
-            <input type="password" id="passInput" placeholder="Şifrenizi Belirleyin">
-            <button class="btn" id="authBtn" onclick="handleAuth()">Hesabı Kur ve Başla</button>
+            <h2 style="color:var(--accent)">GameAir</h2>
+            <input type="email" id="emailIn" placeholder="E-posta">
+            <input type="password" id="passIn" placeholder="Şifre">
+            <button class="btn" onclick="handleLogin()">Giriş Yap</button>
         </div>
     </div>
 
-    <div id="app">
+    <nav id="sidebar" style="display:none;">
+        <div class="brand">GameAir</div>
+        <div class="channel-btn active" onclick="changeChannel('duyurular', this)">duyurular</div>
+        <div class="channel-btn" onclick="changeChannel('sohbet', this)">sohbet</div>
+        <div class="channel-btn" onclick="changeChannel('oyunlar', this)">oyunlar</div>
+        <div class="channel-btn" onclick="changeChannel('kurallar', this)">kurallar</div>
+        <div class="channel-btn" onclick="changeChannel('videolar', this)">videolar</div>
+        
+        <div style="margin-top:auto; font-size:12px; color:#aaa;" id="userDisplay"></div>
+    </nav>
+
+    <main id="app" style="display:none;">
         <header>
-            <div style="font-weight: 900; font-size: 22px; color:var(--accent)">GameAir</div>
-            <div onclick="openModal('settingsModal')" style="cursor:pointer; font-size: 20px;">⚙️</div>
+            <div id="currentChannelTitle" style="font-weight: 800; font-size: 18px;"># duyurular</div>
+            <div onclick="openModal('settingsModal')" style="cursor:pointer">⚙️</div>
         </header>
 
-        <div class="container">
-            <div class="profile-box">
-                <img id="banner" src="" alt="">
-                <div class="pfp-wrap">
-                    <img id="pfp" src="" alt="">
-                    <h2 id="nameDisplay" style="margin: 10px 0 0;">İsimsiz Kullanıcı</h2>
-                    <p id="emailDisplay" style="margin: 5px 0 0; color: #888; font-size: 14px;"></p>
-                </div>
+        <div class="feed-container" id="feed">
             </div>
-
-            <div id="feed"></div>
-        </div>
-    </div>
-
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <h3>Profili Özelleştir</h3>
-            <input type="text" id="editName" placeholder="Görünecek İsim">
-            <label style="font-size: 12px; color: #666;">Profil Fotoğrafı Seç:</label>
-            <input type="file" id="editPfp" accept="image/*">
-            <label style="font-size: 12px; color: #666;">Banner (Arka Plan) Seç:</label>
-            <input type="file" id="editBanner" accept="image/*">
-            <button class="btn" onclick="updateProfile()">Değişiklikleri Kaydet</button>
-            <button onclick="closeModal('settingsModal')" style="background:none; border:none; color:red; width:100%; margin-top:10px; cursor:pointer;">Kapat</button>
-        </div>
-    </div>
+    </main>
 
     <div id="postModal" class="modal">
         <div class="modal-content">
-            <h3>Yeni İçerik Paylaş</h3>
-            <textarea id="postTxt" placeholder="Duyurunuzu yazın..." style="width:100%; height:100px; padding:10px; border-radius:10px; border:1px solid #ddd; margin-bottom:10px; font-family: inherit; resize: none;"></textarea>
-            <label style="font-size: 12px; color: #666;">Galeriden Video Seç:</label>
+            <h3 id="modalTitle">Yeni Gönderi</h3>
+            <textarea id="postTxt" placeholder="Bir şeyler yaz..." style="width:100%; height:100px; border-radius:10px; border:1px solid #ddd; padding:10px; margin-bottom:10px; resize:none;"></textarea>
             <input type="file" id="postVid" accept="video/*">
-            <button class="btn" onclick="uploadPost()">Yayınla</button>
-            <button onclick="closeModal('postModal')" style="background:none; border:none; color:red; width:100%; margin-top:10px; cursor:pointer;">Vazgeç</button>
+            <button class="btn" onclick="sendPost()">Yayınla</button>
+            <button onclick="closeModal('postModal')" style="background:none; border:none; color:red; width:100%; margin-top:10px; cursor:pointer;">İptal</button>
         </div>
     </div>
 
-    <div class="fab" onclick="openModal('postModal')">+</div>
+    <div class="fab" id="fabBtn" style="display:none;" onclick="openModal('postModal')">+</div>
 
     <script>
-        // SİSTEM BAŞLANGIÇ KONTROLÜ
-        window.onload = () => {
-            const savedEmail = localStorage.getItem('ga_email');
-            if(savedEmail) {
-                document.getElementById('authMsg').innerText = "Hoş Geldin! Şifrenle Giriş Yap";
-                document.getElementById('authBtn').innerText = "Oturum Aç";
+        let currentChannel = "duyurular";
+
+        function handleLogin() {
+            const email = document.getElementById('emailIn').value;
+            const pass = document.getElementById('passIn').value;
+            
+            // İlk girişte kayıt eder, sonraki girişlerde kontrol eder
+            if(!localStorage.getItem('admin_email')) {
+                localStorage.setItem('admin_email', email);
+                localStorage.setItem('admin_pass', pass);
             }
-            if(sessionStorage.getItem('ga_session') === 'active') {
-                showApp();
-            }
-        };
 
-        async function handleAuth() {
-            const email = document.getElementById('emailInput').value;
-            const pass = document.getElementById('passInput').value;
-            const savedEmail = localStorage.getItem('ga_email');
-            const savedPass = localStorage.getItem('ga_pass');
-
-            if(!email || !pass) return alert("Lütfen boş bırakma kanka!");
-
-            if(!savedEmail) { // KAYIT OLMA
-                localStorage.setItem('ga_email', email);
-                localStorage.setItem('ga_pass', pass);
-                alert("Hesabın başarıyla kuruldu! Şimdi giriş yapabilirsin.");
-                location.reload();
-            } else { // GİRİŞ YAPMA
-                if(email === savedEmail && pass === savedPass) {
-                    sessionStorage.setItem('ga_session', 'active');
-                    showApp();
-                } else {
-                    alert("E-posta veya şifre hatalı!");
-                }
+            if(email === localStorage.getItem('admin_email') && pass === localStorage.getItem('admin_pass')) {
+                document.getElementById('authScreen').style.display = 'none';
+                document.getElementById('sidebar').style.display = 'flex';
+                document.getElementById('app').style.display = 'flex';
+                document.getElementById('fabBtn').style.display = 'flex';
+                document.getElementById('userDisplay').innerText = email;
+                renderFeed();
+            } else {
+                alert("Hatalı Giriş!");
             }
         }
 
-        function showApp() {
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-            renderData();
+        function changeChannel(ch, el) {
+            currentChannel = ch;
+            document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('currentChannelTitle').innerText = "# " + ch;
+            renderFeed();
         }
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // DOSYA OKUYUCU (GALERİDEN VERİ ÇEKME)
-        function toBase64(file) {
-            return new Promise((res, rej) => {
-                const reader = new FileReader();
-                reader.onload = () => res(reader.result);
-                reader.readAsDataURL(file);
-            });
-        }
-
-        async function updateProfile() {
-            const name = document.getElementById('editName').value;
-            const pfp = document.getElementById('editPfp').files[0];
-            const banner = document.getElementById('editBanner').files[0];
-
-            if(name) localStorage.setItem('ga_name', name);
-            if(pfp) localStorage.setItem('ga_pfp', await toBase64(pfp));
-            if(banner) localStorage.setItem('ga_banner', await toBase64(banner));
-
-            renderData();
-            closeModal('settingsModal');
-        }
-
-        async function uploadPost() {
-            const text = document.getElementById('postTxt').value;
+        async function sendPost() {
+            const txt = document.getElementById('postTxt').value;
             const file = document.getElementById('postVid').files[0];
-            let video = file ? await toBase64(file) : null;
+            let videoData = null;
 
-            const post = { text, video, date: new Date().toLocaleString() };
-            let posts = JSON.parse(localStorage.getItem('ga_posts') || "[]");
+            if(file) {
+                videoData = await new Promise(res => {
+                    const reader = new FileReader();
+                    reader.onload = () => res(reader.result);
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            const post = { channel: currentChannel, text: txt, video: videoData, date: new Date().toLocaleString() };
+            let posts = JSON.parse(localStorage.getItem('ga_posts_v6') || "[]");
             posts.unshift(post);
-            localStorage.setItem('ga_posts', JSON.stringify(posts));
+            localStorage.setItem('ga_posts_v6', JSON.stringify(posts));
 
-            renderData();
-            closeModal('postModal');
             document.getElementById('postTxt').value = "";
+            closeModal('postModal');
+            renderFeed();
         }
 
-        function renderData() {
-            document.getElementById('nameDisplay').innerText = localStorage.getItem('ga_name') || "GameAir User";
-            document.getElementById('emailDisplay').innerText = localStorage.getItem('ga_email');
-            document.getElementById('pfp').src = localStorage.getItem('ga_pfp') || "";
-            document.getElementById('banner').src = localStorage.getItem('ga_banner') || "";
+        function renderFeed() {
+            const posts = JSON.parse(localStorage.getItem('ga_posts_v6') || "[]");
+            const filtered = posts.filter(p => p.channel === currentChannel);
+            const adminName = localStorage.getItem('admin_email').split('@')[0];
 
-            const posts = JSON.parse(localStorage.getItem('ga_posts') || "[]");
-            const uName = localStorage.getItem('ga_name') || "Yönetici";
-            
-            document.getElementById('feed').innerHTML = posts.map(p => `
+            document.getElementById('feed').innerHTML = filtered.map(p => `
                 <div class="post">
-                    <div style="font-weight:bold">${uName} <span class="admin-badge">YÖNETİCİ</span></div>
-                    <p>${p.text}</p>
+                    <div style="font-weight:bold">${adminName} <span class="admin-tag">YÖNETİCİ</span></div>
+                    <p style="margin:10px 0;">${p.text}</p>
                     ${p.video ? `<video controls src="${p.video}"></video>` : ''}
-                    <div style="font-size:10px; color:#aaa; margin-top:10px;">${p.date}</div>
+                    <div style="font-size:10px; color:#aaa;">${p.date}</div>
                 </div>
-            `).join('');
+            `).join(filtered.length ? '' : '<p style="text-align:center; color:#999; margin-top:50px;">Bu kanal henüz boş kanka.</p>');
         }
     </script>
 </body>
