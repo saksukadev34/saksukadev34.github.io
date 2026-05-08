@@ -3,236 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameAir | Professional</title>
+    <title>GameAir | Platform</title>
     <style>
         :root {
-            --bg-dark: #121212;
-            --bg-panel: #1e1e1e;
+            --bg: #0f0f0f;
+            --panel: #1a1a1a;
             --accent: #2ecc71; /* Fosforlu Yeşil */
-            --text-gray: #b3b3b3;
-            --border: #2a2a2a;
+            --text: #ffffff;
+            --border: #2d2d2d;
         }
 
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: white; display: flex; height: 100vh; overflow: hidden; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
-        /* GİRİŞ */
-        #loginScreen { position: fixed; inset: 0; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; z-index: 10000; }
-        .login-box { width: 320px; padding: 40px; background: var(--bg-panel); border-radius: 20px; border: 1px solid var(--border); text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; box-sizing: border-box; }
-        .btn { background: var(--accent); color: #000; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn:hover { transform: scale(1.02); }
+        /* GİRİŞ & KAYIT */
+        #authOverlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+        .auth-card { width: 340px; padding: 40px; background: var(--panel); border-radius: 24px; border: 1px solid var(--border); text-align: center; }
+        input { width: 100%; padding: 14px; margin: 10px 0; background: #000; border: 1px solid var(--border); color: white; border-radius: 12px; box-sizing: border-box; }
+        .btn { background: var(--accent); color: #000; border: none; padding: 14px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn:hover { filter: brightness(1.2); }
 
         /* SIDEBAR */
-        nav { width: 250px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
-        .logo { font-size: 26px; font-weight: 900; color: var(--accent); margin-bottom: 40px; letter-spacing: -1px; }
-        .ch-item { padding: 14px; border-radius: 12px; cursor: pointer; color: var(--text-gray); margin-bottom: 6px; font-weight: 600; font-size: 15px; }
-        .ch-item:hover, .ch-item.active { background: #2a2a2a; color: var(--accent); }
-        .ch-item::before { content: "# "; opacity: 0.4; }
+        nav { width: 260px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        .logo-text { font-size: 28px; font-weight: 900; color: var(--accent); margin-bottom: 40px; letter-spacing: -1px; }
+        .ch-link { padding: 15px; border-radius: 14px; cursor: pointer; color: #777; margin-bottom: 8px; font-weight: 700; transition: 0.2s; }
+        .ch-link:hover, .ch-link.active { background: #252525; color: var(--accent); }
+        .ch-link::before { content: "# "; opacity: 0.4; }
 
-        /* MAIN */
-        main { flex: 1; display: flex; flex-direction: column; position: relative; }
-        header { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
+        /* MAIN AREA */
+        main { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
+        header { height: 70px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
         
-        .user-nav { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .user-pfp { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--accent); background: #333; object-fit: cover; }
+        .user-pill { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 5px 15px; background: #252525; border-radius: 50px; border: 1px solid var(--border); }
+        .user-pill img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
 
-        #feedScroll { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .wrapper { width: 100%; max-width: 650px; }
+        #scrollContainer { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; align-items: center; }
+        .content-width { width: 100%; max-width: 700px; }
 
-        /* PROFİL KARTI */
-        .profile-card { background: var(--bg-panel); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 25px; }
-        #bnr { height: 160px; width: 100%; background: #252525; object-fit: cover; }
-        .pfp-info { padding: 0 20px 20px; display: flex; align-items: flex-end; gap: 15px; margin-top: -50px; }
-        #mainPfp { width: 100px; height: 100px; border-radius: 50%; border: 6px solid var(--bg-panel); background: #222; object-fit: cover; }
+        /* POST & CHAT */
+        .card { background: var(--panel); padding: 20px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 15px; animation: fadeIn 0.4s ease; }
+        .admin-label { color: var(--accent); font-size: 10px; font-weight: 900; border: 1px solid var(--accent); padding: 2px 6px; border-radius: 6px; margin-left: 8px; }
+        video { width: 100%; border-radius: 15px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        /* POSTLAR */
-        .post { background: var(--bg-panel); padding: 20px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 15px; animation: slideUp 0.3s ease; }
-        .admin-badge { border: 1px solid var(--accent); color: var(--accent); font-size: 9px; padding: 2px 6px; border-radius: 5px; margin-left: 10px; font-weight: 800; }
-        video { width: 100%; border-radius: 12px; margin-top: 12px; border: 1px solid #333; }
+        /* CHAT INPUT */
+        .chat-dock { background: var(--panel); border-top: 1px solid var(--border); padding: 20px 30px 40px; display: none; gap: 15px; }
+        .chat-dock input { margin: 0; }
 
-        /* CHAT INPUT (Sadece Sohbet ve Oyunlarda) */
-        .chat-input-area { background: var(--bg-panel); border-top: 1px solid var(--border); padding: 15px 25px 30px; display: none; gap: 12px; }
-        .chat-input-area input { margin: 0; flex: 1; }
+        /* FLOATING ACTION BUTTON */
+        .fab { position: fixed; bottom: 40px; right: 40px; width: 70px; height: 70px; background: var(--accent); color: #000; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 40px; cursor: pointer; box-shadow: 0 10px 30px rgba(46, 204, 113, 0.4); font-weight: 900; }
 
-        /* YETKİLİ + BUTONU (Sadece Duyuru ve Videolarda) */
-        .plus-fab { position: fixed; bottom: 40px; right: 40px; width: 65px; height: 65px; background: var(--accent); color: #000; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 38px; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.6); font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 11000; }
-        .modal-box { background: var(--bg-panel); padding: 30px; border-radius: 25px; width: 380px; border: 1px solid var(--border); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; z-index: 11000; }
+        .modal-body { background: var(--panel); padding: 35px; border-radius: 30px; width: 400px; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
-    <div id="loginScreen">
-        <div class="login-box">
-            <h1 class="logo">GameAir</h1>
-            <input type="email" id="uEmail" placeholder="E-posta">
-            <input type="password" id="uPass" placeholder="Şifre">
-            <button class="btn" onclick="appStart()">Giriş Yap</button>
+    <div id="authOverlay">
+        <div class="auth-card">
+            <div class="logo-text">GameAir</div>
+            <h3 id="authTitle">Giriş Yap / Kaydol</h3>
+            <input type="email" id="authMail" placeholder="E-posta">
+            <input type="password" id="authPass" placeholder="Şifre">
+            <button class="btn" onclick="handleAuth()">Sisteme Gir</button>
+            <p style="font-size: 11px; color: #555; margin-top: 15px;">Yönetici girişi sadece özel hesapla mümkündür.</p>
         </div>
     </div>
 
     <nav>
-        <div class="logo">GameAir</div>
-        <div class="ch-item active" onclick="switchCh('duyurular', this)">duyurular</div>
-        <div class="ch-item" onclick="switchCh('videolar', this)">videolar</div>
-        <div class="ch-item" onclick="switchCh('sohbet', this)">sohbet</div>
-        <div class="ch-item" onclick="switchCh('oyunlar', this)">oyunlar</div>
-        <div class="ch-item" onclick="switchCh('kurallar', this)">kurallar</div>
+        <div class="logo-text">GameAir</div>
+        <div class="ch-link active" onclick="setChannel('duyurular', this)">duyurular</div>
+        <div class="ch-link" onclick="setChannel('videolar', this)">videolar</div>
+        <div class="ch-link" onclick="setChannel('sohbet', this)">sohbet</div>
+        <div class="ch-link" onclick="setChannel('oyunlar', this)">oyunlar</div>
+        <div class="ch-link" onclick="setChannel('kurallar', this)">kurallar</div>
+        
+        <button class="btn" style="margin-top: auto; background: #ff4444; color: white;" onclick="logout()">Çıkış Yap</button>
     </nav>
 
     <main>
         <header>
-            <div id="activeTitle" style="color: var(--accent); font-weight: 800; font-size: 18px;"># duyurular</div>
-            <div class="user-nav" onclick="openM('setModal')">
-                <span id="navUser">Misafir</span>
-                <img id="navPfp" class="user-pfp" src="">
+            <div id="chDisplay" style="color: var(--accent); font-weight: 900; font-size: 20px;"># duyurular</div>
+            <div class="user-pill" onclick="openM('settingsM')">
+                <span id="userNameDisplay">Yükleniyor...</span>
+                <img id="userPfpDisplay" src="">
             </div>
         </header>
 
-        <div id="feedScroll">
-            <div class="wrapper">
-                <div class="profile-card">
-                    <img id="bnr" src="">
-                    <div class="pfp-info">
-                        <img id="mainPfp" src="">
-                        <div>
-                            <h2 id="profName" style="margin:0; font-size: 22px;">GameAir User</h2>
-                            <p id="profMail" style="color:var(--text-gray); margin:5px 0 0; font-size: 13px;"></p>
-                        </div>
-                    </div>
-                </div>
-                <div id="contentList"></div>
-            </div>
+        <div id="scrollContainer">
+            <div class="content-width" id="mainFeed"></div>
         </div>
 
-        <div id="chatInterface" class="chat-input-area">
-            <input type="text" id="chatMsg" placeholder="Buraya bir şeyler yaz...">
-            <button class="btn" style="width: 100px;" onclick="addChat()">Gönder</button>
+        <div id="chatInterface" class="chat-dock">
+            <input type="text" id="chatMsg" placeholder="Bir mesaj yazın...">
+            <button class="btn" style="width: 120px;" onclick="postChat()">Gönder</button>
         </div>
     </main>
 
-    <div id="plusBtn" class="plus-fab" onclick="openM('postModal')">+</div>
+    <div id="adminFab" class="fab" onclick="openM('adminM')">+</div>
 
-    <!-- MODALS -->
-    <div id="postModal" class="modal">
-        <div class="modal-box">
-            <h3>Kanalda Paylaş</h3>
-            <textarea id="postText" placeholder="Mesajını buraya yaz..." style="width:100%; height:120px; background:#000; color:white; border:1px solid #333; padding:12px; border-radius:12px; resize:none; margin-bottom:15px;"></textarea>
-            <label style="font-size: 12px; color: #777;">Video Yükle (Opsiyonel):</label>
-            <input type="file" id="postFile" accept="video/*">
-            <button class="btn" onclick="addPost()">Yayınla</button>
-            <button class="btn" style="background:transparent; color:red; margin-top:10px;" onclick="closeM('postModal')">Vazgeç</button>
+    <!-- MODALLAR -->
+    <div id="adminM" class="modal">
+        <div class="modal-body">
+            <h3>Duyuru Paylaş</h3>
+            <textarea id="adminTxt" placeholder="Ne duyurmak istersin?" style="width:100%; height:120px; background:#000; color:white; border:1px solid #333; padding:15px; border-radius:15px; resize:none;"></textarea>
+            <label style="display:block; margin: 15px 0 5px; font-size:12px;">Video Dosyası:</label>
+            <input type="file" id="adminFile" accept="video/*">
+            <button class="btn" style="margin-top:15px;" onclick="publishAdminPost()">Yayınla</button>
+            <button class="btn" style="background:transparent; color:red;" onclick="closeM('adminM')">Kapat</button>
         </div>
     </div>
 
-    <div id="setModal" class="modal">
-        <div class="modal-box">
-            <h3>Profili Özelleştir</h3>
-            <input type="text" id="setN" placeholder="Görünecek İsim">
-            <label style="font-size: 12px; color: #777;">Profil Resmi Seç:</label><input type="file" id="setP" accept="image/*">
-            <label style="font-size: 12px; color: #777;">Arka Plan (Banner) Seç:</label><input type="file" id="setB" accept="image/*">
-            <button class="btn" onclick="updateProf()">Kaydet</button>
-            <button class="btn" style="background:transparent; color:red; margin-top:10px;" onclick="closeM('setModal')">Kapat</button>
+    <div id="settingsM" class="modal">
+        <div class="modal-body">
+            <h3>Profili Düzenle</h3>
+            <input type="text" id="newName" placeholder="Yeni İsim">
+            <label style="display:block; margin: 10px 0 5px; font-size:12px;">Profil Fotoğrafı:</label>
+            <input type="file" id="newPfp" accept="image/*">
+            <button class="btn" onclick="saveProfile()">Kaydet</button>
+            <button class="btn" style="background:transparent; color:red;" onclick="closeM('settingsM')">İptal</button>
         </div>
     </div>
 
     <script>
-        let currentUser = null;
-        let currentCh = "duyurular";
-        const ADMIN = "ruslanantonovow6837@rambler.ru";
+        let session = null;
+        let activeCh = "duyurular";
+        const ADMIN_ACC = "ruslanantonovow6837@rambler.ru";
+        const ADMIN_PASS = "NggOEkqww0912xyt";
 
-        function appStart() {
-            const e = document.getElementById('uEmail').value;
-            if(!e) return;
-            currentUser = { email: e, name: e.split('@')[0] };
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('navUser').innerText = currentUser.name;
-            document.getElementById('profName').innerText = currentUser.name;
-            document.getElementById('profMail').innerText = currentUser.email;
-            refreshUI();
+        // Sayfa açıldığında oturumu kontrol et
+        window.onload = () => {
+            const saved = localStorage.getItem('ga_session');
+            if(saved) {
+                session = JSON.parse(saved);
+                document.getElementById('authOverlay').style.display = 'none';
+                init();
+            }
+        };
+
+        function handleAuth() {
+            const m = document.getElementById('authMail').value;
+            const p = document.getElementById('authPass').value;
+
+            if(!m || !p) return alert("Bilgileri gir kanka!");
+
+            // Yönetici Kontrolü
+            if(m === ADMIN_ACC) {
+                if(p !== ADMIN_PASS) return alert("Yönetici şifresi hatalı!");
+            }
+
+            session = { mail: m, name: m.split('@')[0], isAdmin: (m === ADMIN_ACC) };
+            localStorage.setItem('ga_session', JSON.stringify(session));
+            document.getElementById('authOverlay').style.display = 'none';
+            init();
+        }
+
+        function init() {
+            document.getElementById('userNameDisplay').innerText = session.name;
+            updateUI();
             render();
         }
 
-        function switchCh(c, el) {
-            currentCh = c;
-            document.querySelectorAll('.ch-item').forEach(i => i.classList.remove('active'));
+        function setChannel(c, el) {
+            activeCh = c;
+            document.querySelectorAll('.ch-link').forEach(l => l.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById('activeTitle').innerText = "# " + c;
-            refreshUI();
+            document.getElementById('chDisplay').innerText = "# " + c;
+            updateUI();
             render();
         }
 
-        function refreshUI() {
-            const isMediaChannel = (currentCh === 'duyurular' || currentCh === 'videolar');
-            const isAdmin = (currentUser.email === ADMIN);
-            
-            // Eğer duyuru/video kanalıysa ve adminsen + butonunu göster
-            document.getElementById('plusBtn').style.display = (isAdmin && isMediaChannel) ? 'flex' : 'none';
-            
-            // Eğer sohbet/oyun kanalıysa her zaman klavyeyi (chat bar) göster
-            document.getElementById('chatInterface').style.display = (!isMediaChannel) ? 'flex' : 'none';
+        function updateUI() {
+            const isMedia = (activeCh === 'duyurular' || activeCh === 'videolar');
+            document.getElementById('adminFab').style.display = (session.isAdmin && isMedia) ? 'flex' : 'none';
+            document.getElementById('chatInterface').style.display = (!isMedia) ? 'flex' : 'none';
         }
 
         function openM(id) { document.getElementById(id).style.display = 'flex'; }
         function closeM(id) { document.getElementById(id).style.display = 'none'; }
 
-        async function updateProf() {
-            const n = document.getElementById('setN').value;
-            const p = document.getElementById('setP').files[0];
-            const b = document.getElementById('setB').files[0];
-            if(n) currentUser.name = n;
-            if(p) localStorage.setItem('pfp_v8', await b64(p));
-            if(b) localStorage.setItem('bnr_v8', await b64(b));
-            location.reload();
+        async function saveProfile() {
+            const n = document.getElementById('newName').value;
+            const f = document.getElementById('newPfp').files[0];
+            if(n) {
+                session.name = n;
+                localStorage.setItem('ga_session', JSON.stringify(session));
+            }
+            if(f) localStorage.setItem('ga_pfp_' + session.mail, await toBase64(f));
+            closeM('settingsM');
+            init();
         }
 
-        async function addPost() {
-            const t = document.getElementById('postText').value;
-            const f = document.getElementById('postFile').files[0];
-            const m = f ? await b64(f) : null;
-            save({ type: 'post', t, m, u: currentUser.name, e: currentUser.email });
-            closeM('postModal');
-            document.getElementById('postText').value = "";
+        async function publishAdminPost() {
+            const t = document.getElementById('adminTxt').value;
+            const f = document.getElementById('adminFile').files[0];
+            const v = f ? await toBase64(f) : null;
+            saveData({ type: 'post', t, v, u: session.name, e: session.mail });
+            closeM('adminM');
+            document.getElementById('adminTxt').value = "";
         }
 
-        function addChat() {
+        function postChat() {
             const t = document.getElementById('chatMsg').value;
             if(!t) return;
-            save({ type: 'chat', t, u: currentUser.name, e: currentUser.email });
+            saveData({ type: 'chat', t, u: session.name, e: session.mail });
             document.getElementById('chatMsg').value = "";
         }
 
-        function save(obj) {
-            let db = JSON.parse(localStorage.getItem('ga_db_v8') || "[]");
-            db.unshift({...obj, ch: currentCh, date: new Date().toLocaleTimeString()});
-            localStorage.setItem('ga_db_v8', JSON.stringify(db));
+        function saveData(obj) {
+            let db = JSON.parse(localStorage.getItem('ga_master_db') || "[]");
+            db.unshift({...obj, ch: activeCh, time: new Date().toLocaleTimeString()});
+            localStorage.setItem('ga_master_db', JSON.stringify(db));
             render();
         }
 
         function render() {
-            const db = JSON.parse(localStorage.getItem('ga_db_v8') || "[]");
-            const filter = db.filter(x => x.ch === currentCh);
+            const db = JSON.parse(localStorage.getItem('ga_master_db') || "[]");
+            const filtered = db.filter(x => x.ch === activeCh);
+            const pfp = localStorage.getItem('ga_pfp_' + session.mail) || "";
             
-            document.getElementById('navPfp').src = localStorage.getItem('pfp_v8') || "";
-            document.getElementById('mainPfp').src = localStorage.getItem('pfp_v8') || "";
-            document.getElementById('bnr').src = localStorage.getItem('bnr_v8') || "";
-
-            document.getElementById('contentList').innerHTML = filter.map(x => `
-                <div class="post">
-                    <div style="font-weight:bold; color:var(--accent)">
-                        ${x.u} ${x.e === ADMIN ? '<span class="admin-badge">YÖNETİCİ</span>' : ''}
+            document.getElementById('userPfpDisplay').src = pfp;
+            document.getElementById('mainFeed').innerHTML = filtered.map(x => `
+                <div class="card">
+                    <div style="font-weight:900; color:var(--accent); display:flex; align-items:center;">
+                        ${x.u} ${x.e === ADMIN_ACC ? '<span class="admin-label">YÖNETİCİ</span>' : ''}
                     </div>
-                    <div style="margin-top:10px; line-height:1.6;">${x.t}</div>
-                    ${x.m ? `<video controls src="${x.m}"></video>` : ''}
-                    <div style="font-size:10px; color:#555; margin-top:10px;">Bugün ${x.date}</div>
+                    <div style="margin-top:12px; line-height:1.6;">${x.t}</div>
+                    ${x.v ? `<video controls src="${x.v}"></video>` : ''}
+                    <div style="font-size:10px; color:#444; margin-top:12px; font-weight:bold;">SAAT: ${x.time}</div>
                 </div>
             `).join('');
         }
 
-        function b64(f) { return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); }); }
+        function logout() {
+            localStorage.removeItem('ga_session');
+            location.reload();
+        }
+
+        function toBase64(f) { return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); }); }
     </script>
 </body>
 </html>
