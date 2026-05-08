@@ -3,238 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameAir | Future</title>
+    <title>GameAir | Professional</title>
     <style>
         :root {
-            --bg-body: #141414;
-            --bg-card: #1f1f1f;
+            --bg-dark: #121212;
+            --bg-panel: #1e1e1e;
             --accent: #2ecc71; /* Fosforlu Yeşil */
-            --text: #ffffff;
-            --border: #333;
+            --text-gray: #b3b3b3;
+            --border: #2a2a2a;
         }
 
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-body); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: white; display: flex; height: 100vh; overflow: hidden; }
 
-        /* GİRİŞ EKRANI */
-        #loginOverlay { position: fixed; inset: 0; background: var(--bg-body); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .login-card { width: 320px; padding: 30px; background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border); text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid var(--border); color: white; border-radius: 10px; box-sizing: border-box; }
-        .btn { background: var(--accent); color: #000; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; }
+        /* GİRİŞ */
+        #loginScreen { position: fixed; inset: 0; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+        .login-box { width: 320px; padding: 40px; background: var(--bg-panel); border-radius: 20px; border: 1px solid var(--border); text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid var(--border); color: white; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: var(--accent); color: #000; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn:hover { transform: scale(1.02); }
 
         /* SIDEBAR */
-        nav { width: 240px; background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
-        .logo { font-size: 28px; font-weight: 900; color: var(--accent); margin-bottom: 40px; text-shadow: 0 0 10px rgba(46, 204, 113, 0.3); }
-        .ch { padding: 12px; border-radius: 10px; cursor: pointer; color: #888; margin-bottom: 5px; transition: 0.2s; }
-        .ch:hover, .ch.active { background: #2a2a2a; color: var(--accent); }
-        .ch::before { content: "# "; }
+        nav { width: 250px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        .logo { font-size: 26px; font-weight: 900; color: var(--accent); margin-bottom: 40px; letter-spacing: -1px; }
+        .ch-item { padding: 14px; border-radius: 12px; cursor: pointer; color: var(--text-gray); margin-bottom: 6px; font-weight: 600; font-size: 15px; }
+        .ch-item:hover, .ch-item.active { background: #2a2a2a; color: var(--accent); }
+        .ch-item::before { content: "# "; opacity: 0.4; }
 
-        /* ANA ALAN */
-        main { flex: 1; display: flex; flex-direction: column; }
-        header { height: 65px; background: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; box-sizing: border-box; }
+        /* MAIN */
+        main { flex: 1; display: flex; flex-direction: column; position: relative; }
+        header { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
         
-        .nav-user { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .nav-pfp { width: 35px; height: 35px; border-radius: 50%; background: #444; border: 2px solid var(--accent); object-fit: cover; }
+        .user-nav { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .user-pfp { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--accent); background: #333; object-fit: cover; }
 
-        #scrollArea { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 650px; }
+        #feedScroll { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .wrapper { width: 100%; max-width: 650px; }
 
-        /* PROFIL */
-        .profile-header { background: var(--bg-card); border-radius: 15px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
-        #bannerBox { height: 150px; width: 100%; background: #2a2a2a; object-fit: cover; }
-        .pfp-row { padding: 15px; display: flex; align-items: flex-end; gap: 15px; margin-top: -60px; }
-        #mainPfp { width: 100px; height: 100px; border-radius: 50%; border: 5px solid var(--bg-card); background: #333; object-fit: cover; }
+        /* PROFİL KARTI */
+        .profile-card { background: var(--bg-panel); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 25px; }
+        #bnr { height: 160px; width: 100%; background: #252525; object-fit: cover; }
+        .pfp-info { padding: 0 20px 20px; display: flex; align-items: flex-end; gap: 15px; margin-top: -50px; }
+        #mainPfp { width: 100px; height: 100px; border-radius: 50%; border: 6px solid var(--bg-panel); background: #222; object-fit: cover; }
 
         /* POSTLAR */
-        .post { background: var(--bg-card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 15px; }
-        .badge { background: var(--accent); color: #000; font-size: 9px; padding: 2px 6px; border-radius: 4px; margin-left: 10px; font-weight: bold; vertical-align: middle; }
-        video { width: 100%; border-radius: 10px; margin-top: 10px; background: #000; }
+        .post { background: var(--bg-panel); padding: 20px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 15px; animation: slideUp 0.3s ease; }
+        .admin-badge { border: 1px solid var(--accent); color: var(--accent); font-size: 9px; padding: 2px 6px; border-radius: 5px; margin-left: 10px; font-weight: 800; }
+        video { width: 100%; border-radius: 12px; margin-top: 12px; border: 1px solid #333; }
 
-        /* CHAT BAR */
-        .chat-bar { background: var(--bg-card); padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 10px; padding-bottom: 25px; }
-        
-        .add-btn { position: fixed; bottom: 40px; right: 40px; width: 60px; height: 60px; background: var(--accent); color: #000; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 35px; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); font-weight: bold; }
+        /* CHAT INPUT (Sadece Sohbet ve Oyunlarda) */
+        .chat-input-area { background: var(--bg-panel); border-top: 1px solid var(--border); padding: 15px 25px 30px; display: none; gap: 12px; }
+        .chat-input-area input { margin: 0; flex: 1; }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 10000; }
-        .modal-box { background: var(--bg-card); padding: 30px; border-radius: 20px; width: 350px; border: 1px solid var(--border); }
+        /* YETKİLİ + BUTONU (Sadece Duyuru ve Videolarda) */
+        .plus-fab { position: fixed; bottom: 40px; right: 40px; width: 65px; height: 65px; background: var(--accent); color: #000; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 38px; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.6); font-weight: bold; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 11000; }
+        .modal-box { background: var(--bg-panel); padding: 30px; border-radius: 25px; width: 380px; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
-    <div id="loginOverlay">
-        <div class="login-card">
+    <div id="loginScreen">
+        <div class="login-box">
             <h1 class="logo">GameAir</h1>
-            <p style="font-size: 13px; color: #777;">Hesabınla Giriş Yap</p>
-            <input type="email" id="logEmail" placeholder="E-posta">
-            <input type="password" id="logPass" placeholder="Şifre">
-            <button class="btn" onclick="enterApp()">Sisteme Gir</button>
+            <input type="email" id="uEmail" placeholder="E-posta">
+            <input type="password" id="uPass" placeholder="Şifre">
+            <button class="btn" onclick="appStart()">Giriş Yap</button>
         </div>
     </div>
 
     <nav>
         <div class="logo">GameAir</div>
-        <div class="ch active" onclick="goCh('duyurular', this)">duyurular</div>
-        <div class="ch" onclick="goCh('videolar', this)">videolar</div>
-        <div class="ch" onclick="goCh('sohbet', this)">sohbet</div>
-        <div class="ch" onclick="goCh('oyunlar', this)">oyunlar</div>
-        <div class="ch" onclick="goCh('kurallar', this)">kurallar</div>
+        <div class="ch-item active" onclick="switchCh('duyurular', this)">duyurular</div>
+        <div class="ch-item" onclick="switchCh('videolar', this)">videolar</div>
+        <div class="ch-item" onclick="switchCh('sohbet', this)">sohbet</div>
+        <div class="ch-item" onclick="switchCh('oyunlar', this)">oyunlar</div>
+        <div class="ch-item" onclick="switchCh('kurallar', this)">kurallar</div>
     </nav>
 
     <main>
         <header>
-            <div id="chName" style="color: var(--accent); font-weight: 800;"># duyurular</div>
-            <div class="nav-user" onclick="openM('setM')">
-                <span id="topName">Misafir</span>
-                <img id="topPfp" class="nav-pfp" src="">
+            <div id="activeTitle" style="color: var(--accent); font-weight: 800; font-size: 18px;"># duyurular</div>
+            <div class="user-nav" onclick="openM('setModal')">
+                <span id="navUser">Misafir</span>
+                <img id="navPfp" class="user-pfp" src="">
             </div>
         </header>
 
-        <div id="scrollArea">
-            <div class="container">
-                <div class="profile-header">
-                    <img id="bannerBox" src="">
-                    <div class="pfp-row">
+        <div id="feedScroll">
+            <div class="wrapper">
+                <div class="profile-card">
+                    <img id="bnr" src="">
+                    <div class="pfp-info">
                         <img id="mainPfp" src="">
                         <div>
-                            <h2 id="profN" style="margin:0">Yükleniyor...</h2>
-                            <p id="profE" style="color:#666; margin:0; font-size: 13px;"></p>
+                            <h2 id="profName" style="margin:0; font-size: 22px;">GameAir User</h2>
+                            <p id="profMail" style="color:var(--text-gray); margin:5px 0 0; font-size: 13px;"></p>
                         </div>
                     </div>
                 </div>
-                <div id="feed"></div>
+                <div id="contentList"></div>
             </div>
         </div>
 
-        <div id="chatBox" class="chat-bar" style="display:none;">
-            <input type="text" id="chatInput" placeholder="Mesaj yazın...">
-            <button class="btn" style="width: 100px;" onclick="sendMsg()">Gönder</button>
+        <div id="chatInterface" class="chat-input-area">
+            <input type="text" id="chatMsg" placeholder="Buraya bir şeyler yaz...">
+            <button class="btn" style="width: 100px;" onclick="addChat()">Gönder</button>
         </div>
     </main>
 
-    <div id="plus" class="add-btn" onclick="openM('postM')">+</div>
+    <div id="plusBtn" class="plus-fab" onclick="openM('postModal')">+</div>
 
-    <div id="postM" class="modal">
+    <!-- MODALS -->
+    <div id="postModal" class="modal">
         <div class="modal-box">
-            <h3>İçerik Yayınla</h3>
-            <textarea id="pTxt" style="width:100%; height:100px; background:#111; color:#fff; border:1px solid #333; padding:10px; border-radius:10px; margin-bottom:10px; resize:none;"></textarea>
-            <input type="file" id="pVid" accept="video/*">
-            <button class="btn" onclick="pushPost()">Yayınla</button>
-            <button onclick="closeM('postM')" style="background:none; border:none; color:red; margin-top:10px; width:100%; cursor:pointer;">İptal</button>
+            <h3>Kanalda Paylaş</h3>
+            <textarea id="postText" placeholder="Mesajını buraya yaz..." style="width:100%; height:120px; background:#000; color:white; border:1px solid #333; padding:12px; border-radius:12px; resize:none; margin-bottom:15px;"></textarea>
+            <label style="font-size: 12px; color: #777;">Video Yükle (Opsiyonel):</label>
+            <input type="file" id="postFile" accept="video/*">
+            <button class="btn" onclick="addPost()">Yayınla</button>
+            <button class="btn" style="background:transparent; color:red; margin-top:10px;" onclick="closeM('postModal')">Vazgeç</button>
         </div>
     </div>
 
-    <div id="setM" class="modal">
+    <div id="setModal" class="modal">
         <div class="modal-box">
-            <h3>Profili Düzenle</h3>
-            <input type="text" id="setName" placeholder="İsim">
-            <label style="font-size:12px;">Profil Fotoğrafı:</label><input type="file" id="setPfp" accept="image/*">
-            <label style="font-size:12px;">Banner:</label><input type="file" id="setBnr" accept="image/*">
-            <button class="btn" onclick="saveSet()">Kaydet</button>
-            <button onclick="closeM('setM')" style="background:none; border:none; color:red; margin-top:10px; width:100%; cursor:pointer;">Kapat</button>
+            <h3>Profili Özelleştir</h3>
+            <input type="text" id="setN" placeholder="Görünecek İsim">
+            <label style="font-size: 12px; color: #777;">Profil Resmi Seç:</label><input type="file" id="setP" accept="image/*">
+            <label style="font-size: 12px; color: #777;">Arka Plan (Banner) Seç:</label><input type="file" id="setB" accept="image/*">
+            <button class="btn" onclick="updateProf()">Kaydet</button>
+            <button class="btn" style="background:transparent; color:red; margin-top:10px;" onclick="closeM('setModal')">Kapat</button>
         </div>
     </div>
 
     <script>
-        let me = null;
-        let activeCh = "duyurular";
-        const ADMIN_MAIL = "ruslanantonovow6837@rambler.ru";
+        let currentUser = null;
+        let currentCh = "duyurular";
+        const ADMIN = "ruslanantonovow6837@rambler.ru";
 
-        function enterApp() {
-            const e = document.getElementById('logEmail').value;
-            const p = document.getElementById('logPass').value;
-            if(!e) return alert("E-posta yaz kanka");
-
-            me = { email: e, name: e.split('@')[0] };
-            document.getElementById('loginOverlay').style.display = 'none';
-            
-            document.getElementById('topName').innerText = me.name;
-            document.getElementById('profN').innerText = me.name;
-            document.getElementById('profE').innerText = me.email;
-            
-            syncUI();
-            draw();
+        function appStart() {
+            const e = document.getElementById('uEmail').value;
+            if(!e) return;
+            currentUser = { email: e, name: e.split('@')[0] };
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('navUser').innerText = currentUser.name;
+            document.getElementById('profName').innerText = currentUser.name;
+            document.getElementById('profMail').innerText = currentUser.email;
+            refreshUI();
+            render();
         }
 
-        function goCh(c, el) {
-            activeCh = c;
-            document.querySelectorAll('.ch').forEach(i => i.classList.remove('active'));
+        function switchCh(c, el) {
+            currentCh = c;
+            document.querySelectorAll('.ch-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById('chName').innerText = "# " + c;
-            syncUI();
-            draw();
+            document.getElementById('activeTitle').innerText = "# " + c;
+            refreshUI();
+            render();
         }
 
-        function syncUI() {
-            const isMedia = (activeCh === 'duyurular' || activeCh === 'videolar');
-            const isBoss = (me.email === ADMIN_MAIL);
+        function refreshUI() {
+            const isMediaChannel = (currentCh === 'duyurular' || currentCh === 'videolar');
+            const isAdmin = (currentUser.email === ADMIN);
             
-            document.getElementById('plus').style.display = (isBoss && isMedia) ? 'flex' : 'none';
-            document.getElementById('chatBox').style.display = (!isMedia) ? 'flex' : 'none';
+            // Eğer duyuru/video kanalıysa ve adminsen + butonunu göster
+            document.getElementById('plusBtn').style.display = (isAdmin && isMediaChannel) ? 'flex' : 'none';
+            
+            // Eğer sohbet/oyun kanalıysa her zaman klavyeyi (chat bar) göster
+            document.getElementById('chatInterface').style.display = (!isMediaChannel) ? 'flex' : 'none';
         }
 
         function openM(id) { document.getElementById(id).style.display = 'flex'; }
         function closeM(id) { document.getElementById(id).style.display = 'none'; }
 
-        async function saveSet() {
-            const n = document.getElementById('setName').value;
-            const p = document.getElementById('setPfp').files[0];
-            const b = document.getElementById('setBnr').files[0];
+        async function updateProf() {
+            const n = document.getElementById('setN').value;
+            const p = document.getElementById('setP').files[0];
+            const b = document.getElementById('setB').files[0];
+            if(n) currentUser.name = n;
+            if(p) localStorage.setItem('pfp_v8', await b64(p));
+            if(b) localStorage.setItem('bnr_v8', await b64(b));
+            location.reload();
+        }
 
-            if(n) me.name = n;
-            if(p) localStorage.setItem('u_pfp', await f2b(p));
-            if(b) localStorage.setItem('u_bnr', await f2b(b));
+        async function addPost() {
+            const t = document.getElementById('postText').value;
+            const f = document.getElementById('postFile').files[0];
+            const m = f ? await b64(f) : null;
+            save({ type: 'post', t, m, u: currentUser.name, e: currentUser.email });
+            closeM('postModal');
+            document.getElementById('postText').value = "";
+        }
+
+        function addChat() {
+            const t = document.getElementById('chatMsg').value;
+            if(!t) return;
+            save({ type: 'chat', t, u: currentUser.name, e: currentUser.email });
+            document.getElementById('chatMsg').value = "";
+        }
+
+        function save(obj) {
+            let db = JSON.parse(localStorage.getItem('ga_db_v8') || "[]");
+            db.unshift({...obj, ch: currentCh, date: new Date().toLocaleTimeString()});
+            localStorage.setItem('ga_db_v8', JSON.stringify(db));
+            render();
+        }
+
+        function render() {
+            const db = JSON.parse(localStorage.getItem('ga_db_v8') || "[]");
+            const filter = db.filter(x => x.ch === currentCh);
             
-            document.getElementById('profN').innerText = me.name;
-            document.getElementById('topName').innerText = me.name;
-            closeM('setM');
-            draw();
-        }
+            document.getElementById('navPfp').src = localStorage.getItem('pfp_v8') || "";
+            document.getElementById('mainPfp').src = localStorage.getItem('pfp_v8') || "";
+            document.getElementById('bnr').src = localStorage.getItem('bnr_v8') || "";
 
-        async function pushPost() {
-            const t = document.getElementById('pTxt').value;
-            const v = document.getElementById('pVid').files[0];
-            let vData = v ? await f2b(v) : null;
-            
-            addItem({ type: 'post', text: t, media: vData, user: me.name, mail: me.email });
-            closeM('postM');
-            document.getElementById('pTxt').value = "";
-        }
-
-        function sendMsg() {
-            const m = document.getElementById('chatInput').value;
-            if(!m) return;
-            addItem({ type: 'chat', text: m, user: me.name, mail: me.email });
-            document.getElementById('chatInput').value = "";
-        }
-
-        function addItem(obj) {
-            let store = JSON.parse(localStorage.getItem('ga_data_v7') || "[]");
-            store.unshift({...obj, ch: activeCh, time: new Date().toLocaleString()});
-            localStorage.setItem('ga_data_v7', JSON.stringify(store));
-            draw();
-        }
-
-        function draw() {
-            const store = JSON.parse(localStorage.getItem('ga_data_v7') || "[]");
-            const filter = store.filter(x => x.ch === activeCh);
-            
-            document.getElementById('topPfp').src = localStorage.getItem('u_pfp') || "";
-            document.getElementById('mainPfp').src = localStorage.getItem('u_pfp') || "";
-            document.getElementById('bannerBox').src = localStorage.getItem('u_bnr') || "";
-
-            document.getElementById('feed').innerHTML = filter.map(x => `
+            document.getElementById('contentList').innerHTML = filter.map(x => `
                 <div class="post">
                     <div style="font-weight:bold; color:var(--accent)">
-                        ${x.user} ${x.mail === ADMIN_MAIL ? '<span class="badge">YÖNETİCİ</span>' : ''}
+                        ${x.u} ${x.e === ADMIN ? '<span class="admin-badge">YÖNETİCİ</span>' : ''}
                     </div>
-                    <div style="margin:10px 0; line-height:1.5;">${x.text}</div>
-                    ${x.media ? `<video controls src="${x.media}"></video>` : ''}
-                    <div style="font-size:10px; color:#666;">${x.time}</div>
+                    <div style="margin-top:10px; line-height:1.6;">${x.t}</div>
+                    ${x.m ? `<video controls src="${x.m}"></video>` : ''}
+                    <div style="font-size:10px; color:#555; margin-top:10px;">Bugün ${x.date}</div>
                 </div>
             `).join('');
         }
 
-        function f2b(file) { return new Promise(r => { const rd = new FileReader(); rd.onload = () => r(rd.result); rd.readAsDataURL(file); }); }
+        function b64(f) { return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); }); }
     </script>
 </body>
 </html>
